@@ -38,7 +38,6 @@ class CarState(CarStateBase):
     self.cruise_unavail_cnt = 0
 
     self.apply_steer = 0.
-    self.steeringTorqueEps = 0
 
     # scc smoother
     self.acc_mode = False
@@ -93,7 +92,6 @@ class CarState(CarStateBase):
 
     ret.steeringAngleDeg = cp_sas.vl["SAS11"]['SAS_Angle']
     ret.steeringRateDeg = cp_sas.vl["SAS11"]['SAS_Speed']
-    
     ret.yawRate = cp.vl["ESP12"]['YAW_RATE']
     ret.leftBlinker, ret.rightBlinker = self.update_blinker_from_lamp(50, cp.vl["CGW1"]['CF_Gway_TurnSigLh'],
                                                             cp.vl["CGW1"]['CF_Gway_TurnSigRh'])
@@ -139,7 +137,7 @@ class CarState(CarStateBase):
 
     ret.gasPressed = cp.vl["TCS13"]["DriverOverride"] == 1
 
-    if self.CP.carFingerprint in (HYBRID_CAR | EV_CAR):
+    if self.CP.carFingerprint in EV_HYBRID_CAR:
       if self.CP.carFingerprint in HYBRID_CAR:
         ret.gas = cp.vl["E_EMS11"]["CR_Vcu_AccPedDep_Pos"] / 254.
       else:
@@ -238,11 +236,11 @@ class CarState(CarStateBase):
     self.cruiseState_enabled = ret.cruiseState.enabled
     self.cruiseState_speed = ret.cruiseState.speed
     ret.cruiseGap = self.cruise_gap
+
     return ret
 
   @staticmethod
   def get_can_parser(CP):
-    
 
     signals = [
       # sig_name, sig_address, default
@@ -460,7 +458,7 @@ class CarState(CarStateBase):
         ("CF_Lvr_Gear","LVR12",0),
       ]
 
-    if CP.carFingerprint in (HYBRID_CAR | EV_CAR):
+    if CP.carFingerprint in EV_HYBRID_CAR:
       if CP.carFingerprint in HYBRID_CAR:
         signals += [
           ("CR_Vcu_AccPedDep_Pos", "E_EMS11", 0)
@@ -488,12 +486,12 @@ class CarState(CarStateBase):
         ("FCA_CmdAct", "FCA11", 0),
         ("CF_VSM_Warn", "FCA11", 0),
       ]
-      # if not CP.openpilotLongitudinalControl:
-      #   checks += [("FCA11", 50)]
+
+      if not CP.openpilotLongitudinalControl:
+        checks += [("FCA11", 50)]
 
     if CP.carFingerprint in [CAR.SANTA_FE]:
       checks.remove(("TCS13", 50))
-
 
     if CP.enableBsm:
       signals += [
@@ -530,19 +528,20 @@ class CarState(CarStateBase):
         ("CF_Mdps_Def", "MDPS12", 0),
         ("CF_Mdps_ToiActive", "MDPS12", 0),
         ("CF_Mdps_ToiUnavail", "MDPS12", 0),
+        ("CF_Mdps_ToiFlt", "MDPS12", 0),
         ("CF_Mdps_MsgCount2", "MDPS12", 0),
         ("CF_Mdps_Chksum2", "MDPS12", 0),
-        ("CF_Mdps_ToiFlt", "MDPS12", 0),
         ("CF_Mdps_SErr", "MDPS12", 0),
         ("CR_Mdps_StrTq", "MDPS12", 0),
         ("CF_Mdps_FailStat", "MDPS12", 0),
         ("CR_Mdps_OutTq", "MDPS12", 0),
-        ("CR_Mdps_DrvTq", "MDPS11", 0),
+        ("CR_Mdps_DrvTq", "MDPS11", 0)
       ]
       checks += [
         ("MDPS12", 50),
         ("MDPS11", 100),
       ]
+
     if CP.sasBus == 1:
       signals += [
         ("SAS_Angle", "SAS11", 0),
