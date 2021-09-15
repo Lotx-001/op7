@@ -18,8 +18,11 @@ _LIMIT_ADAPT_ACC = -1.2  # Ideal acceleration for the adapting (braking) phase w
 _MAX_MAP_DATA_AGE = 10.0  # s Maximum time to hold to map data, then consider it invalid.
 
 # Lookup table for speed limit percent offset depending on speed.
-_LIMIT_PERC_OFFSET_V = [0.1, 0.05, 0.038]  # 55, 105, 135 km/h
-_LIMIT_PERC_OFFSET_BP = [13.9, 27.8, 36.1]  # 50, 100, 130 km/h
+_LIMIT_PERC_OFFSET_V = [0.0, 0.17, 0.2,  0.2, 0.17, 0.16, 0.17]  # 25, 35, 48, 60, 65, 75, 82 mph
+_LIMIT_PERC_OFFSET_BP = [11.0, 13.4, 20.1, 22.3, 24.58, 29.0, 31.3]  # 25, 30, 40 50, 55, 65, 70 mph
+
+#_LIMIT_PERC_OFFSET_V = [0.1, 0.05, 0.038]  # 55, 105, 135 km/h
+#_LIMIT_PERC_OFFSET_BP = [13.9, 27.8, 36.1]  # 50, 100, 130 km/h
 
 SpeedLimitControlState = log.LongitudinalPlan.SpeedLimitControlState
 EventName = car.CarEvent.EventName
