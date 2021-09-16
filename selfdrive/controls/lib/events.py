@@ -155,9 +155,9 @@ class NoEntryAlert(Alert):
 class SoftDisableAlert(Alert):
   def __init__(self, alert_text_2):
     super().__init__("TAKE CONTROL IMMEDIATELY", alert_text_2,
-                     AlertStatus.critical, AlertSize.full,
+                     AlertStatus.userPrompt, AlertSize.full,
                      Priority.MID, VisualAlert.steerRequired,
-                     AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
+                     AudibleAlert.chimeError, .1, 2., 2.),
 
 
 class ImmediateDisableAlert(Alert):
@@ -191,35 +191,8 @@ def below_steer_speed_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: 
     "TAKE CONTROL",
     "Steer Unavailable Below %d %s" % (speed, unit),
     AlertStatus.userPrompt, AlertSize.mid,
-    Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 1., 1.)
+    Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 0., 0.4, .3)
 
-def flTPMS(CP: car.CarParams, sm: messaging.SubMaster, metric: bool) -> Alert:
-  return Alert(
-    "LOW FRONT LEFT TIRE PRESSURE",
-    "Please Check",
-    AlertStatus.userPrompt, AlertSize.mid,
-    Priority.MID, VisualAlert.none, AudibleAlert.chimePrompt, 0., 0.4, .3)
-
-def frTPMS(CP: car.CarParams, sm: messaging.SubMaster, metric: bool) -> Alert:
-  return Alert(
-    "LOW FRONT RIGHT TIRE PRESSURE",
-    "Please Check",
-    AlertStatus.userPrompt, AlertSize.mid,
-    Priority.MID, VisualAlert.none, AudibleAlert.chimePrompt, 0., 0.4, .3)
-
-def rlTPMS(CP: car.CarParams, sm: messaging.SubMaster, metric: bool) -> Alert:
-  return Alert(  
-    "LOW REAR LEFT TIRE PRESSURE",
-    "Please Check",
-    AlertStatus.userPrompt, AlertSize.mid,
-    Priority.MID, VisualAlert.none, AudibleAlert.chimePrompt, 0., 0.4, .3)
-
-def rrTPMS(CP: car.CarParams, sm: messaging.SubMaster, metric: bool) -> Alert:
-  return Alert(
-    "LOW REAR RIGHT TIRE PRESSURE",
-    "Please Check",
-    AlertStatus.userPrompt, AlertSize.mid,
-    Priority.MID, VisualAlert.none, AudibleAlert.chimePrompt, 0., 0.4, .3)
 
 def calibration_incomplete_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool) -> Alert:
   speed = int(MIN_SPEED_FILTER * (CV.MS_TO_KPH if metric else CV.MS_TO_MPH))
@@ -252,7 +225,7 @@ def startup_fuzzy_fingerprint_alert(CP: car.CarParams, sm: messaging.SubMaster, 
     "WARNING: No Exact Match on Car Model",
     f"Closest Match: {CP.carFingerprint.title()[:40]}",
     AlertStatus.userPrompt, AlertSize.mid,
-    Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.)
+    Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 10.)
 
 def auto_lane_change_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool) -> Alert:
   alc_timer = sm['lateralPlan'].autoLaneChangeTimer
@@ -298,7 +271,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "Be ready to take over at any time",
       "Always keep hands on wheel and eyes on road",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 10.),
   },
 
   EventName.startupMaster: {
@@ -306,7 +279,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "WARNING: This branch is not tested",
       "Always keep hands on wheel and eyes on road",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 10.),
   },
 
   # Car is recognized, but marked as dashcam only
@@ -315,7 +288,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "Dashcam mode",
       "Always keep hands on wheel and eyes on road",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 10.),
   },
 
   # Car is not recognized
@@ -324,7 +297,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "Dashcam mode for unsupported car",
       "Always keep hands on wheel and eyes on road",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 10.),
   },
 
   # openpilot uses the version strings from various ECUs to detect the correct car model.
@@ -344,7 +317,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "Car Unrecognized",
       "Check All Connections",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 10.),
   },
 
   EventName.dashcamMode: {
@@ -515,24 +488,10 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
     ET.WARNING: below_steer_speed_alert,
   },
 
-  EventName.fl: {
-    ET.WARNING: flTPMS,
-  },
-  EventName.fr: {
-    ET.WARNING: frTPMS,
-  },
-
-  EventName.rl: {
-    ET.WARNING: rlTPMS,
-  },
-  EventName.rr: {
-    ET.WARNING: rrTPMS,
-  },
-  
   EventName.preLaneChangeLeft: {
     ET.WARNING: Alert(
       "Steer Left to Start Lane Change Once Safe",
-      "Monitor Other Vehicles",
+      "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
@@ -540,7 +499,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   EventName.preLaneChangeRight: {
     ET.WARNING: Alert(
       "Steer Right to Start Lane Change Once Safe",
-      "Monitor Other Vehicles",
+      "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
@@ -548,7 +507,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   EventName.laneChangeBlocked: {
     ET.WARNING: Alert(
       "Car Detected in Blindspot",
-      "Monitor Other Vehicles",
+      "",
       AlertStatus.userPrompt, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimePrompt, .1, .1, .1),
   },
@@ -556,7 +515,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   EventName.laneChange: {
     ET.WARNING: Alert(
       "Changing Lanes",
-      "Monitor Other Vehicles",
+      "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
   },
@@ -564,7 +523,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   EventName.steerSaturated: {
     ET.WARNING: Alert(
       "TAKE CONTROL",
-      "User override or MDPS Fault",
+      "Turn Exceeds Steering Limit",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 1., 1.),
   },
@@ -661,6 +620,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.steerTempUnavailable: {
     ET.SOFT_DISABLE: SoftDisableAlert("Steering Temporarily Unavailable"),
+    ET.NO_ENTRY: NoEntryAlert("Steering Temporarily Unavailable",
+                              duration_hud_alert=0.),
   },
 
   EventName.outOfSpace: {
@@ -954,8 +915,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   
   EventName.turningIndicatorOn: {
     ET.WARNING: Alert(
-      "Assisted Lane Change Unavailable Under 20MPH",
-      "Steer Unavailable while Turning with Blinker.",
+      "TAKE CONTROL",
+      "Steer Unavailable while Turning",
       AlertStatus.userPrompt, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .0, .2),
   },
