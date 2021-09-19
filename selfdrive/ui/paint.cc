@@ -54,7 +54,7 @@ static void ui_draw_circle(UIState *s, float x, float y, float size, NVGcolor co
 
 static void ui_draw_speed_sign(UIState *s, float x, float y, int size, float speed, const char *subtext, 
                                float subtext_size, const char *font_name, bool is_map_sourced, bool is_active) {
-  NVGcolor ring_color = is_active ? COLOR_RED : COLOR_BLACK_ALPHA(.2f * 255);
+  NVGcolor ring_color = is_active ? COLOR_BLACK : COLOR_BLACK_ALPHA(.2f * 255);
   NVGcolor inner_color = is_active ? COLOR_WHITE : COLOR_WHITE_ALPHA(.35f * 255);
   NVGcolor text_color = is_active ? COLOR_BLACK : COLOR_BLACK_ALPHA(.3f * 255);
 
