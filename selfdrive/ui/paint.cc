@@ -45,9 +45,9 @@ static void ui_draw_text(const UIState *s, float x, float y, const char *string,
   nvgText(s->vg, x, y, string, NULL);
 }
 
-static void ui_draw_rect(UIState *s, float x, float y, float size, NVGcolor color) {
+static void ui_draw_rect(UIState *s, float x, float y, float w, float h, NVGcolor color) {
   nvgBeginPath(s->vg);
-  nvgRect(s->vg, x, y, size);
+  nvgRect(s->vg, r.x, r.y, r.w, r.h);
   nvgFillColor(s->vg, color);
   nvgFill(s->vg);
 }
@@ -58,8 +58,8 @@ static void ui_draw_speed_sign(UIState *s, float x, float y, int size, float spe
   NVGcolor inner_color = is_active ? COLOR_WHITE : COLOR_WHITE_ALPHA(.35f * 255);
   NVGcolor text_color = is_active ? COLOR_BLACK : COLOR_BLACK_ALPHA(.3f * 255);
 
-  ui_draw_rect(s, x, y, float(size), rect_color);
-  ui_draw_rect(s, x, y, float(size) * 0.8, inner_color);
+  ui_draw_rect(s, x, y, w, h, float(size), rect_color);
+  ui_draw_rect(s, x, y, w, h, float(size) * 0.8, inner_color);
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
 
