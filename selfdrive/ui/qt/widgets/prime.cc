@@ -88,13 +88,13 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
 
   primeLayout->addSpacing(60);
 
-  QLabel* commaPrime = new QLabel("Circuit Pro HKG");
+  QLabel* commaPrime = new QLabel("Retropilot");
   commaPrime->setStyleSheet("font-size: 75px; font-weight: bold;");
   primeLayout->addWidget(commaPrime, 0, Qt::AlignTop);
 
   primeLayout->addSpacing(20);
 
-  QLabel* connectUrl = new QLabel("Welcome To The Community!");
+  QLabel* connectUrl = new QLabel("Openpilot Community");
   connectUrl->setStyleSheet("font-size: 41px; font-family: Inter SemiBold; color: #A0A0A0;");
   primeLayout->addWidget(connectUrl, 0, Qt::AlignTop);
 
@@ -102,17 +102,17 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
 
   // comma points layout
   QWidget *pointsWidget = new QWidget;
-  pointsWidget->setObjectName("primeWidget");
+  pointsWidget->setObjectName("Openpilot Discord");
   QVBoxLayout *pointsLayout = new QVBoxLayout(pointsWidget);
   pointsLayout->setMargin(0);
   pointsWidget->setContentsMargins(60, 50, 60, 50);
 
-  QLabel* commaPoints = new QLabel("Please Join Our Discord.");
+  QLabel* commaPoints = new QLabel("Join HKG Discord.");
   commaPoints->setStyleSheet("font-size: 50px; font-family: Inter SemiBold;");
   pointsLayout->addWidget(commaPoints, 0, Qt::AlignTop);
 
 
-  QLabel* points = new QLabel("https://discord.gg/bXGF7r8EPW");
+  QLabel* points = new QLabel("# HKG");
   points->setStyleSheet("font-size: 37px; font-weight: bold;");
   pointsLayout->addWidget(points, 0, Qt::AlignTop);
 
@@ -148,19 +148,19 @@ PrimeAdWidget::PrimeAdWidget(QWidget* parent) : QFrame(parent) {
   main_layout->addWidget(upgrade, 0, Qt::AlignTop);
   main_layout->addSpacing(50);
 
-  QLabel *description = new QLabel("If you are seeing this somethings not right!");
+  QLabel *description = new QLabel("Server offline");
   description->setStyleSheet("font-size: 60px; font-weight: light; color: white;");
   description->setWordWrap(true);
   main_layout->addWidget(description, 0, Qt::AlignTop);
 
   main_layout->addStretch();
 
-  QLabel *features = new QLabel("PRIME FEATURES:");
+  QLabel *features = new QLabel("Retropilot Server");
   features->setStyleSheet("font-size: 41px; font-weight: bold; color: #E5E5E5;");
   main_layout->addWidget(features, 0, Qt::AlignBottom);
   main_layout->addSpacing(30);
 
-  QVector<QString> bullets = {"Not Right", "RetroPilot", "Services Down"};
+  QVector<QString> bullets = {"RetroPilot", "Services Down"};
   for (auto &b: bullets) {
     const QString check = "<b><font color='#465BEA'>✓</font></b> ";
     QLabel *l = new QLabel(check + b);
