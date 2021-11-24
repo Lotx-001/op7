@@ -16,7 +16,7 @@ from selfdrive.controls.lib.longcontrol import LongCtrlState
 from selfdrive.road_speed_limiter import road_speed_limiter_get_active
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
-min_set_speed = 30 * CV.KPH_TO_MS
+min_set_speed = 0 * CV.KPH_TO_MS
 
 
 SP_CARS = [CAR.GENESIS, CAR.GENESIS_G70, CAR.GENESIS_G80,
