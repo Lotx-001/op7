@@ -38,18 +38,18 @@ def manager_init():
 
     ("OpenpilotEnabledToggle", "1"),
     ("CommunityFeaturesToggle", "1"),
-    ("IsMetric", "1"),
+    ("IsMetric", "0"),
 
     # HKG
     ("UseClusterSpeed", "1"),
     ("LongControlEnabled", "0"),
     ("MadModeEnabled", "1"),
     ("IsLdwsCar", "0"),
-    ("LaneChangeEnabled", "0"),
-    ("AutoLaneChangeEnabled", "0"),
+    ("LaneChangeEnabled", "1"),
+    ("AutoLaneChangeEnabled", "1"),
 
-    ("SccSmootherSlowOnCurves", "0"),
-    ("SccSmootherSyncGasPressed", "0"),
+    ("SccSmootherSlowOnCurves", "1"),
+    ("SccSmootherSyncGasPressed", "1"),
     ("StockNaviDecelEnabled", "0"),
     ("ShowDebugUI", "0"),
     ("DisableOpFcw", "0"),
